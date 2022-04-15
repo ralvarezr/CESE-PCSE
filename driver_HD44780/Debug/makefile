@@ -60,8 +60,8 @@ all: main-build
 main-build: driver_HD44780.elf secondary-outputs
 
 # Tool invocations
-driver_HD44780.elf driver_HD44780.map: $(OBJS) $(USER_OBJS) D:\Ricardo\Postgrado\CESE\Materias\02\ -\ Protocolos\ de\ Comunicacion\Trabajo\ Final\driver_HD44780\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "driver_HD44780.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Ricardo\Postgrado\CESE\Materias\02 - Protocolos de Comunicacion\Trabajo Final\driver_HD44780\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="driver_HD44780.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+driver_HD44780.elf driver_HD44780.map: $(OBJS) $(USER_OBJS) D:\Ricardo\Postgrado\CESE\Materias\02\ -\ Protocolos\ de\ Comunicacion\Trabajo\ Final\CESE-PCSE\driver_HD44780\STM32F429ZITX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "driver_HD44780.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"D:\Ricardo\Postgrado\CESE\Materias\02 - Protocolos de Comunicacion\Trabajo Final\CESE-PCSE\driver_HD44780\STM32F429ZITX_FLASH.ld" --specs=nosys.specs -Wl,-Map="driver_HD44780.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
