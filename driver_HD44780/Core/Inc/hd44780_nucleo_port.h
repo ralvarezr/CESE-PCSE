@@ -14,8 +14,13 @@
 
 
 void i2c_init(void);
-bool i2c_transmit_nucleo_port(uint16_t address, uint8_t data);
-void delay_nucleo_port(uint32_t ms);
 
+bool i2c_transmit_nucleo_port(uint16_t address, uint8_t data);
+
+void delay_ms_nucleo_port(uint32_t ms);
+
+bool delay_us_nucleo_port_init(void);
+
+void delay_us_nucleo_port(uint32_t us);
 
 #endif /* INC_HD44780_NUCLEO_PORT_H_ */
