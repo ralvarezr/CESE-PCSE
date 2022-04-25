@@ -96,6 +96,21 @@ void delay_us_nucleo_port(volatile uint32_t au32_microseconds) {
 }
 
 /************************************************************************************************************
+  * @brief  Fucion Handler de errores de ST.
+  * @retval None
+************************************************************************************************************/
+static void Error_Handler(void) {
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+
+/************************************************************************************************************
   * @brief Funcion de inicializacion del I2C1 generada por la IDE de STM.
   * @param None
   * @return None
@@ -129,7 +144,8 @@ static void MX_I2C1_Init(void) {
   {
     Error_Handler();
   }
-
+  
+  /* Se inicializa el delay de us */
   if (delay_us_nucleo_port_init() == false)
   {
     Error_Handler();
@@ -138,25 +154,12 @@ static void MX_I2C1_Init(void) {
 
 /************************************************************************************************************
  * @brief Esta funcion inicializa el I2C1 de la placa nucleo.
- * 
+ *
  * @return None.
- * 
+ *
  * @see MX_I2C1_INIT
 ************************************************************************************************************/
 void i2c_init(void) {
         MX_I2C1_Init();
 }
 
-/************************************************************************************************************
-  * @brief  Fucion Handler de errores de ST.
-  * @retval None
-************************************************************************************************************/
-static void Error_Handler(void) {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
-  __disable_irq();
-  while (1)
-  {
-  }
-  /* USER CODE END Error_Handler_Debug */
-}
