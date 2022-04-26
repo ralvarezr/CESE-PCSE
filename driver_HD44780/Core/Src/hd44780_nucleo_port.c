@@ -18,7 +18,6 @@ static I2C_HandleTypeDef hi2c1;
  * @param address Dirección del esclavo.
  * @param data Datos a enviar.
  * 
- * @return True si se pudo transmitir. False si hubo algún problema.
 ************************************************************************************************************/
 void i2c_transmit_nucleo_port(uint16_t address, uint8_t data) {
 
