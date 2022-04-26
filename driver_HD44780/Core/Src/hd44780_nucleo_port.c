@@ -21,7 +21,7 @@ static I2C_HandleTypeDef hi2c1;
 ************************************************************************************************************/
 void i2c_transmit_nucleo_port(uint16_t address, uint8_t data) {
 
-        HAL_I2C_Master_Transmit(&hi2c1, address, &data, (uint16_t)1, (uint32_t)10);
+	HAL_I2C_Master_Transmit(&hi2c1, address, &data, (uint16_t)1, (uint32_t)10);
 }
 
 /************************************************************************************************************
@@ -140,7 +140,7 @@ static void MX_I2C1_Init(void) {
   }
   
   /* Se inicializa el delay de us */
-  if (delay_us_nucleo_port_init() == false)
+  if (delay_us_nucleo_port_init())
   {
     Error_Handler();
   }
