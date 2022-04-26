@@ -19,7 +19,7 @@
  * a usarse dentro de la estructura del driver.
 ************************************************************************************************************/
 typedef void (*i2c_init_t)(void);
-typedef bool (*i2c_transmit_t)(uint16_t, uint8_t);
+typedef void (*i2c_transmit_t)(uint16_t, uint8_t);
 typedef void (*delayms_t)(uint32_t);
 typedef void (*delayus_t)(uint32_t);
 
