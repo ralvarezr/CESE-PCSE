@@ -1,3 +1,0 @@
-../Core/Src/hd44780.c:142:13:_press_enable	16	static
-../Core/Src/hd44780.c:178:13:_write_command	8	static
-../Core/Src/hd44780.c:196:6:hd44780_init_driver	8	static
