@@ -11,11 +11,12 @@
 /* Los pines RS, RW, EN y BL están ubicados en el Low Nibble del Byte de data 
  * El High Nibble está compuesto por los pines D7-D4 respectivamente
  ******************************************************************************/
-#define RS              0x01    /* 0000 0001 . 0 = Commands. 1 = Characters.*/
+#define RS_CMD          0x01    /* 0000 0001 . 0 = Commands. 1 = Characters.*/
+#define RS_CHR          0x00    /* 0000 0000 . 0 = Commands. 1 = Characters.*/
 #define RW              0x02    /* 0000 0010 . 0 = Write. 1 = Read. ESTE PIN SIEMPRE SE DEJA EN 0 PORQUE NO SE LEE DESDE EL DISPLAY. */
 #define ENABLE          0x04    /* 0000 0100 */
-#define BL              0x08    /* 0000 1000 . 0 = Off. 1 = On */
-
+#define BL_ON           0x08    /* 0000 1000 . 0 = Off. 1 = On */
+#define BL_OFF          0x00    /* 0000 0000 . 0 = Off. 1 = On */
 
 /******************************** Comandos ***********************************/
 /* La conexión entre el I2C y el LCD solo abarca 4 pines de datos
@@ -23,18 +24,18 @@
  * y luego la parte baja (Low Nibble). Los primeros 4bits son los datos del comandos
  * y el resto son los pines de control.
  ******************************************************************************/
-#define CMD_CLEAR_DISPLAY_HN    0x00    /* 0000 0000 */
-#define CMD_CLEAR_DISPLAY_LN    0X10    /* 0001 0000 */
+#define CLEAR_DISPLAY_HN    0x00    /* 0000 0000 */
+#define CLEAR_DISPLAY_LN    0X10    /* 0001 0000 */
 
-#define CMD_RETURN_HOME_HN      0x00    /* 0000 0000 */
-#define CMD_RETURN_HOME_LN      0X30    /* 0011 0000 */
+#define RETURN_HOME_HN      0x00    /* 0000 0000 */
+#define RETURN_HOME_LN      0X30    /* 0011 0000 */
 
 /* Entry Mode Set */
 /* Todos estos comandos comparten el mismo High Nibble. */
-#define CMD_ENTRY_MODE_SET_HN                           0X00    /* 0000 0000 */
-#define CMD_ENTRY_MODE_SET_OFF_LN                       0x40    /* 0100 0000 */
-#define CMD_ENTRY_MODE_CURSOR_RIGHT_LN                  0X20    /* 0010 0000*/
-#define CMD_ENTRY_MODE_DISPLAY_SHIFT_LN                 0X10    /* 0001 0000*/
+#define ENTRY_MODE_SET_HN                           0X00    /* 0000 0000 */
+#define ENTRY_MODE_SET_OFF_LN                       0x40    /* 0100 0000 */
+#define ENTRY_MODE_CURSOR_LN                        0X20    /* 0010 0000. bit 1. 1 = Right, 0 = Left */
+#define ENTRY_MODE_DISPLAY_SHIFT_LN                 0X10    /* 0001 0000. bit 0. 1 =  Accompanies display shift. 0 = Off */
 
 /* Display Control */
 /* Todos estos comandos comparten el mismo High Nibble. */
@@ -54,9 +55,10 @@
 /* Function Set */
 /* Todos estos comandos comparten el mismo High Nibble. */
 #define FUNCTION_SET_HN                 0x20    /* 0010 0000. Configuracion de 4bits. */ 
-#define FUNCTION_SET_2LINE_LN           0X80    /* 1000 0000. 1 = 2 Line Display. 0 = 1 Line Display */
-#define FUNCTON_SET_5X10_CHAR_LN        0X40    /* 0100 0000. 1 = 5x10 char set. 0 = 5x8 char set */
-
+#define FUNCTION_SET_2LINE_LN           0X80    /* 1000 0000. bit 7. 1 = 2 Line Display. 0 = 1 Line Display */
+#define FUNCTION_SET_1LINE_LN           0X00    /* 0000 0000. bit 7. 1 = 2 Line Display. 0 = 1 Line Display */
+#define FUNCTON_SET_5X10_CHAR_LN        0X40    /* 0100 0000. bit 6. 1 = 5x10 char set. 0 = 5x8 char set */
+#define FUNCTON_SET_5X8_CHAR_LN         0X00    /* 0000 0000. bit 6. 1 = 5x10 char set. 0 = 5x8 char set */
 
 /************************************************************************************************************
  *  Typedef para controlar el valor de la luz de fondo.
@@ -78,6 +80,16 @@ typedef struct{
         uint8_t ln;
 
 }function_set_t;
+
+/************************************************************************************************************
+ *  Estructura donde se almacenan los nibbles del Entry Mode Set.
+************************************************************************************************************/
+typedef struct{
+
+        uint8_t hn;
+        uint8_t ln;
+
+}entry_mode_set_t;
 
 /************************************************************************************************************
  *  Estructura donde se almacenan los nibbles del Display Control.
@@ -113,12 +125,39 @@ typedef struct {
         cursor_display_shift_t cursor_display_shift;
         display_control_t display_control;
         select_register_t select_register;
+        entry_mode_set_t entry_mode;
 
 }driver_t;
 
 static driver_t driver;
 
-/**
+
+/************************************************************************************************************
+ * @brief Función auxiliar que hace la secuencia de pulsación del pin de Enable.
+ * 
+ * @param data Datos a enviar al LCD.
+ * 
+ * @return None.
+************************************************************************************************************/
+static void _press_enable(uint8_t data) {
+        
+        /* Habilito el bit de Enable sobre la data */
+        data |= ENABLE;
+
+        driver.hd44780_control.i2c_write(driver.hd44780_control.address, data);
+
+        driver.hd44780_control.delay_us(450);
+
+        /* Limpio el bit de Enable de la data */
+        data &= ~ENABLE;
+
+        driver.hd44780_control.i2c_write(driver.hd44780_control.address, data);
+
+        driver.hd44780_control.delay_us(40);
+        
+}
+
+/************************************************************************************************************
  * @brief Función auxiliar que envía el comando por I2C.
  *      Los comandos se arman de la siguiente manera:
  *              CMD | BL | RS
@@ -135,19 +174,93 @@ static driver_t driver;
  * @param driver Instancia del driver que posee las funciones, comandos y estados a enviar.
  * 
  * @return None.
- */
-static void _write_command(drivert_t driver) {
+************************************************************************************************************/
+static void _write_command(void) {
+        
+        driver.data = driver.data | driver.backlight | driver.select_register;
+
+        //driver.hd44780_control.i2c_write(driver.hd44780_control.address, driver.data);
+
+        _press_enable(driver.data);
+
+        //driver.hd44780_control.delay_us(40);
+
         
 }
 
-
-/**
- * @brief Función interna que hace la secuencia de pulsación del pin de Enable.
+/************************************************************************************************************
+ * @brief Función que inicializa el driver del LCD HD44780.
  * 
- * @param data Datos a enviar al LCD.
- * 
- * @return None.
- */
-/*static void _press_enable(uint8_t data) {
+ * @param config Estructura del driver a inicializar.
+************************************************************************************************************/
+void hd44780_init_driver(hd44780_t config) {
 
-}*/
+        /* Cargo los valores en la estructura privada */
+        driver.hd44780_control.delay_ms = config.delay_ms;
+        driver.hd44780_control.delay_us = config.delay_us;
+        driver.hd44780_control.i2c_init = config.i2c_init;
+        driver.hd44780_control.i2c_write = config.i2c_write;
+        driver.hd44780_control.n_rows = config.n_rows;
+        driver.hd44780_control.address = config.address;
+
+        /* Inicialización el I2C */
+        driver.hd44780_control.i2c_init();
+
+        /* Cargos los valores por defecto en la estructura */
+        driver.backlight = BL_ON;
+        driver.select_register = RS_CMD;
+        
+        driver.function_set.hn = FUNCTION_SET_HN;
+
+        if (driver.hd44780_control.n_rows == 1) {
+                driver.function_set.ln = FUNCTION_SET_1LINE_LN | FUNCTON_SET_5X10_CHAR_LN;
+        } else {
+                driver.function_set.ln = FUNCTION_SET_2LINE_LN | FUNCTON_SET_5X8_CHAR_LN;
+        }
+
+        driver.display_control.hn = DISPLAY_HN;
+        driver.display_control.ln = DISPLAY_OFF_LN;
+
+        driver.entry_mode.hn = ENTRY_MODE_SET_HN;
+        driver.entry_mode.ln = ENTRY_MODE_SET_OFF_LN;
+
+        /* Secuencia de inicialización del LCD para 4bits como se indica en el Datasheet */
+        driver.data = 0x30;     /* 0011 0000 */
+        _write_command();
+        driver.hd44780_control.delay_ms(5);
+        _write_command();
+        driver.hd44780_control.delay_us(110);
+        _write_command();
+
+        driver.data = 0x20;      /* 0010 0000 */
+        _write_command();
+
+        driver.data = driver.function_set.hn;
+        _write_command();
+
+        driver.data = driver.function_set.ln;
+        _write_command();
+
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
+        _write_command();
+
+        driver.data = CLEAR_DISPLAY_HN;
+        _write_command();
+
+        driver.data = CLEAR_DISPLAY_LN;
+        _write_command();
+
+        driver.data = driver.entry_mode.hn;
+        _write_command();
+
+        driver.data = driver.entry_mode.ln;
+        _write_command();
+
+}
+
+
+
+
