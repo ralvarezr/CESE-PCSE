@@ -55,6 +55,7 @@ void hd44780_display_shift_right(void);
 void hd44780_display_shift_left(void);
 void hd44780_cursor_shift_right(void);
 void hd44780_cursor_shift_left(void);
+void hd44780_set_cursor(uint8_t column, uint8_t row);
 
 
 #endif /* INC_HD44780_H_ */
