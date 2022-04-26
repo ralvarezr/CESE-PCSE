@@ -21,12 +21,7 @@ static I2C_HandleTypeDef hi2c1;
 ************************************************************************************************************/
 void i2c_transmit_nucleo_port(uint16_t address, uint8_t data) {
 
-        if(HAL_I2C_Master_Transmit(&hi2c1, address, &data, (uint16_t)1, (uint32_t)10) != HAL_OK)
-        {
-                return false;
-        }
-
-        return true;
+        HAL_I2C_Master_Transmit(&hi2c1, address, &data, (uint16_t)1, (uint32_t)10);
 }
 
 /************************************************************************************************************
