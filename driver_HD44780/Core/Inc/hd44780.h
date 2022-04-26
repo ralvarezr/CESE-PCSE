@@ -32,10 +32,13 @@ struct _hd44780 {
 	delayms_t delay_ms;
         delayus_t delay_us;
         uint8_t n_rows;
+        uint16_t address;
 };
 
 typedef struct _hd44780 hd44780_t;
 
+
+bool hd44780_init_driver(hd44780_t config);
 
 
 #endif /* INC_HD44780_H_ */
