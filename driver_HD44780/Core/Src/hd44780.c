@@ -288,3 +288,15 @@ void hd44780_print_char(const char character) {
         driver.select_register &= ~RS_CHR;
 }
 
+
+/************************************************************************************************************
+ * @brief Función que una cadena de caracteres en el LCD.
+ * 
+ * @param string cadena a imprimir.
+************************************************************************************************************/
+void hd44780_print_string(const char *string) {
+        
+        while(*string) {
+                hd44780_print_char(*string++);
+        }
+}
