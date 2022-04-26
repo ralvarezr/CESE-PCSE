@@ -179,12 +179,9 @@ static void _write_command(void) {
         
         driver.data = driver.data | driver.backlight | driver.select_register;
 
-        //driver.hd44780_control.i2c_write(driver.hd44780_control.address, driver.data);
+        driver.hd44780_control.i2c_write(driver.hd44780_control.address, driver.data);
 
         _press_enable(driver.data);
-
-        //driver.hd44780_control.delay_us(40);
-
         
 }
 
@@ -219,59 +216,75 @@ void hd44780_init_driver(hd44780_t config) {
         }
 
         driver.display_control.hn = DISPLAY_HN;
-        driver.display_control.ln = DISPLAY_OFF_LN;
+        driver.display_control.ln = DISPLAY_OFF_LN | DISPLAY_ON_LN | CURSOR_ON_LN;
 
         driver.entry_mode.hn = ENTRY_MODE_SET_HN;
-        driver.entry_mode.ln = ENTRY_MODE_SET_OFF_LN;
+        driver.entry_mode.ln = ENTRY_MODE_SET_OFF_LN | ENTRY_MODE_CURSOR_LN;
 
         /* Secuencia de inicialización del LCD para 4bits como se indica en el Datasheet */
-        driver.hd44780_control.delay_ms(15);
+        driver.hd44780_control.delay_ms(50);
 
-        driver.data = 0x30;     /* 0011 0000 */
+        driver.data = 0x30;
         _write_command();
-        driver.hd44780_control.delay_ms(5);
+        driver.hd44780_control.delay_ms(10);
         _write_command();
-        driver.hd44780_control.delay_us(110);
+        driver.hd44780_control.delay_ms(10);
         _write_command();
+        driver.hd44780_control.delay_ms(10);
+        driver.data = 0x20;
+        _write_command();
+        driver.hd44780_control.delay_ms(10);
 
-        driver.data = 0x20;      /* 0010 0000 */
-        _write_command();
-
+        //Function Set.
         driver.data = driver.function_set.hn;
         _write_command();
 
         driver.data = driver.function_set.ln;
         _write_command();
 
+        driver.hd44780_control.delay_ms(10);
+
+        //Display Control.
         driver.data = driver.display_control.hn;
         _write_command();
 
         driver.data = driver.display_control.ln;
         _write_command();
+        driver.hd44780_control.delay_ms(10);
 
+        //Clear Display.
         driver.data = CLEAR_DISPLAY_HN;
         _write_command();
 
         driver.data = CLEAR_DISPLAY_LN;
         _write_command();
+        driver.hd44780_control.delay_ms(10);
 
+        //Entry Mode Set.
         driver.data = driver.entry_mode.hn;
         _write_command();
 
         driver.data = driver.entry_mode.ln;
         _write_command();
-
-/*
-        uint8_t car = "a";
-        driver.select_register = RS_CHR;
-        driver.data = car & 0xF0;
-        _write_command();
-        driver.data = (car<<4) & 0xF0;
-        _write_command();*/
-
+        driver.hd44780_control.delay_ms(10);
 
 }
 
+/************************************************************************************************************
+ * @brief Función que escribe un caracater en el LCD.
+ * 
+ * @param character caracter a imprimir.
+************************************************************************************************************/
+void hd44780_write_char(const char character) {
 
+        driver.select_register = RS_CHR;
 
+        uint8_t data = (uint8_t)character;
+        /* Escribo primero el high nibble del caracter y luego el low nibble */
+        driver.data = data & 0xF0;
+        _write_command();
+        driver.data = (data << 4);
+        _write_command();
+        driver.select_register &= ~RS_CHR;
+}
 
