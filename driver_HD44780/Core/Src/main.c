@@ -102,6 +102,12 @@ int main(void)
 
   hd44780_init_driver(lcd);
 
+  hd44780_write_char('a');
+
+  HAL_Delay(5000);
+
+  hd44780_write_char('b');
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
