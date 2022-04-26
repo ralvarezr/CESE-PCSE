@@ -212,6 +212,7 @@ void hd44780_init_driver(hd44780_t config) {
         if (driver.hd44780_control.n_rows == 1) {
                 driver.function_set.ln = FUNCTION_SET_1LINE_LN | FUNCTON_SET_5X10_CHAR_LN;
         } else {
+                driver.hd44780_control.rows = 2;
                 driver.function_set.ln = FUNCTION_SET_2LINE_LN | FUNCTON_SET_5X8_CHAR_LN;
         }
 
