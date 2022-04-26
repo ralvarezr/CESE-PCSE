@@ -1,0 +1,7 @@
+../Core/Src/hd44780_nucleo_port.c:23:6:i2c_transmit_nucleo_port	24	static
+../Core/Src/hd44780_nucleo_port.c:42:6:delay_ms_nucleo_port	16	static
+../Core/Src/hd44780_nucleo_port.c:53:13:delay_us_nucleo_port_init	4	static,ignoring_inline_asm
+../Core/Src/hd44780_nucleo_port.c:90:6:delay_us_nucleo_port	24	static
+../Core/Src/hd44780_nucleo_port.c:102:13:Error_Handler	4	static,ignoring_inline_asm
+../Core/Src/hd44780_nucleo_port.c:118:13:MX_I2C1_Init	8	static
+../Core/Src/hd44780_nucleo_port.c:162:6:i2c_init	8	static
