@@ -44,4 +44,8 @@ void hd44780_print_string(const char *string);
 void hd44780_clear_screen(void);
 void hd44780_cursor_blink_on(void);
 void hd44780_cursor_blink_off(void);
+void hd44780_cursor_on(void);
+void hd44780_cursor_off(void);
+
+
 #endif /* INC_HD44780_H_ */

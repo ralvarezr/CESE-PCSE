@@ -355,3 +355,35 @@ void hd44780_cursor_blink_off(void) {
         driver.data = driver.display_control.ln;
         _write_command();
 }
+
+/************************************************************************************************************
+ * @brief Función que enciende el cursor.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_cursor_on(void) {
+        
+        driver.display_control.ln |= CURSOR_ON_LN;
+        
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que apaga el cursor.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_cursor_off(void) {
+        
+        driver.display_control.ln &= ~CURSOR_ON_LN;
+        
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
+        _write_command();
+}

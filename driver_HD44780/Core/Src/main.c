@@ -128,6 +128,13 @@ int main(void)
 
   hd44780_cursor_blink_off();
 
+  HAL_Delay(1000);
+
+  hd44780_cursor_off();
+
+  HAL_Delay(2000);
+
+  hd44780_cursor_on();
 
 
   /* USER CODE END 2 */
