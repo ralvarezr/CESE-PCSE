@@ -102,58 +102,107 @@ int main(void)
 
   hd44780_init_driver(lcd);
 
-  hd44780_print_string("Hola!");
-
-  HAL_Delay(1000);
-
-  hd44780_print_char('a');
-
-  HAL_Delay(1000);
-
-  hd44780_print_char('b');
-  
-  HAL_Delay(1000);
-
-  hd44780_print_string("??????????????????");
-
-  HAL_Delay(3000);
-
-  hd44780_clear_screen();
-
-  HAL_Delay(3000);
-
-  hd44780_print_string("!!!!!!!!");
-
-  hd44780_cursor_blink_on();
-
-  HAL_Delay(3000);
-
-  hd44780_cursor_blink_off();
-
-  HAL_Delay(1000);
-
-  hd44780_cursor_off();
+  /* Programa de demostración del LCD */
 
   HAL_Delay(2000);
 
+  const char *buffer = "Protocolos";
+
+  while(*buffer)
+  {
+    hd44780_print_char(*buffer++);
+    HAL_Delay(200);
+  }
+
+  HAL_Delay(500);
+
+  hd44780_set_cursor(2, 1);
+
+  hd44780_print_string("de Comunicacion");
+
+  hd44780_cursor_blink_on();
+
+  HAL_Delay(2000);
+
+  hd44780_clear_screen();
+  hd44780_cursor_blink_off();
+  hd44780_cursor_off();
+  hd44780_set_cursor(1, 6);
+
+  hd44780_print_string("en");
+
+  HAL_Delay(500);
+
+  hd44780_set_cursor(2, 0);
+  hd44780_print_string("Sitemas Embebidos");
+
+
+  HAL_Delay(1000);
+
+  hd44780_display_shift_left();
+  HAL_Delay(400);
+  hd44780_display_shift_left();
+  HAL_Delay(400);
+  hd44780_display_shift_left();
+  HAL_Delay(400);
+  hd44780_display_shift_left();
+  HAL_Delay(400);
+  hd44780_display_shift_left();
+
+  HAL_Delay(1000);
+
+  hd44780_display_shift_right();
+  HAL_Delay(400);
+  hd44780_display_shift_right();
+  HAL_Delay(400);
+  hd44780_display_shift_right();
+  HAL_Delay(400);
+  hd44780_display_shift_right();
+  HAL_Delay(400);
+  hd44780_display_shift_right();
+
+  HAL_Delay(2000);
+
+
+  hd44780_clear_screen();
   hd44780_cursor_on();
+  hd44780_set_cursor(1,6);
+  hd44780_print_string("TP");
+  hd44780_set_cursor(2,5);
+  hd44780_print_string("Final");
+  hd44780_cursor_blink_on();
 
-  HAL_Delay(3000);
-
-  hd44780_display_off();
-
-  HAL_Delay(3000);
-
-  hd44780_display_on();
-
-  HAL_Delay(3000);
+  HAL_Delay(2000);
 
   hd44780_backlight_off();
 
-  HAL_Delay(3000);
+  HAL_Delay(500);
 
   hd44780_backlight_on();
 
+  HAL_Delay(500);
+  hd44780_backlight_off();
+
+  HAL_Delay(500);
+  hd44780_backlight_on();
+
+  HAL_Delay(500);
+  hd44780_backlight_off();
+
+  HAL_Delay(500);
+
+  hd44780_backlight_on();
+  hd44780_clear_screen();
+
+  HAL_Delay(500);
+
+  hd44780_set_cursor(1,4);
+  hd44780_print_string("Gracias!!");
+  hd44780_return_home();
+
+  hd44780_cursor_blink_off();
+
+  HAL_Delay(300);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -163,6 +212,36 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+
+	  for(uint8_t i = 0; i < 16; i++)
+	  {
+		  hd44780_cursor_shift_right();
+		  HAL_Delay(100);
+	  }
+
+	  for(uint8_t i = 0; i < 16; i++)
+	  {
+		  hd44780_cursor_shift_left();
+		  HAL_Delay(100);
+	  }
+
+	  hd44780_set_cursor(2, 0);
+	  HAL_Delay(100);
+
+	  for(uint8_t i = 0; i < 16; i++)
+	  {
+		  hd44780_cursor_shift_right();
+		  HAL_Delay(100);
+	  }
+
+	  for(uint8_t i = 0; i < 16; i++)
+	  {
+		  hd44780_cursor_shift_left();
+		  HAL_Delay(100);
+	  }
+
+	  hd44780_set_cursor(1, 0);
+	  HAL_Delay(100);
   }
   /* USER CODE END 3 */
 }
