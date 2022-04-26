@@ -31,6 +31,7 @@ struct _hd44780 {
 	i2c_transmit_t i2c_write;
 	delayms_t delay_ms;
         delayus_t delay_us;
+        uint8_t n_rows;
 };
 
 typedef struct _hd44780 hd44780_t;
