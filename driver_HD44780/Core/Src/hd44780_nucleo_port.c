@@ -153,7 +153,7 @@ static void MX_I2C1_Init(void) {
  *
  * @see MX_I2C1_INIT
 ************************************************************************************************************/
-void i2c_init(void) {
+void i2c_init_nucleo_port(void) {
         MX_I2C1_Init();
 }
 

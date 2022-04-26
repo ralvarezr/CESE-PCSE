@@ -13,7 +13,7 @@
 #include <stdbool.h>
 
 
-void i2c_init(void);
+void i2c_init_nucleo_port(void);
 
 void i2c_transmit_nucleo_port(uint16_t address, uint8_t data);
 
