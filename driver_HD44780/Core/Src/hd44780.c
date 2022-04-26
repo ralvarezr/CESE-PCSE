@@ -275,7 +275,7 @@ void hd44780_init_driver(hd44780_t config) {
  * 
  * @param character caracter a imprimir.
 ************************************************************************************************************/
-void hd44780_write_char(const char character) {
+void hd44780_print_char(const char character) {
 
         driver.select_register = RS_CHR;
 
