@@ -46,6 +46,10 @@ void hd44780_cursor_blink_on(void);
 void hd44780_cursor_blink_off(void);
 void hd44780_cursor_on(void);
 void hd44780_cursor_off(void);
+void hd44780_display_on(void);
+void hd44780_display_off(void);
+void hd44780_backlight_on(void);
+void hd44780_backlight_off(void);
 
 
 #endif /* INC_HD44780_H_ */

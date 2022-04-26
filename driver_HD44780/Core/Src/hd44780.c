@@ -30,6 +30,8 @@
 #define RETURN_HOME_HN      0x00    /* 0000 0000 */
 #define RETURN_HOME_LN      0X30    /* 0011 0000 */
 
+#define NO_DATA             0X00    /* 0000 0000 */
+
 /* Entry Mode Set */
 /* Todos estos comandos comparten el mismo High Nibble. */
 #define ENTRY_MODE_SET_HN                           0X00    /* 0000 0000 */
@@ -386,4 +388,64 @@ void hd44780_cursor_off(void) {
 
         driver.data = driver.display_control.ln;
         _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que enciende el display.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_display_on(void) {
+        
+        driver.display_control.ln |= DISPLAY_ON_LN;
+        
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que apaga el display.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_display_off(void) {
+        
+        driver.display_control.ln &= ~DISPLAY_ON_LN;
+        
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que enciende la luz de fondo del display.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_backlight_on(void) {
+        
+        driver.backlight = BL_ON;
+
+        driver.data = NO_DATA;
+
+        _write_command();        
+}
+
+/************************************************************************************************************
+ * @brief Función que apaga la luz de fondo del display.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_backlight_off(void) {
+        
+        driver.backlight = BL_OFF;
+
+        driver.data = NO_DATA;
+
+        _write_command();  
 }

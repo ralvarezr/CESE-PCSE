@@ -111,20 +111,22 @@ int main(void)
   HAL_Delay(1000);
 
   hd44780_print_char('b');
+  
+  HAL_Delay(1000);
 
   hd44780_print_string("??????????????????");
 
-  HAL_Delay(1000);
+  HAL_Delay(3000);
 
   hd44780_clear_screen();
 
-  HAL_Delay(1000);
+  HAL_Delay(3000);
 
   hd44780_print_string("!!!!!!!!");
 
   hd44780_cursor_blink_on();
 
-  HAL_Delay(1000);
+  HAL_Delay(3000);
 
   hd44780_cursor_blink_off();
 
@@ -136,6 +138,21 @@ int main(void)
 
   hd44780_cursor_on();
 
+  HAL_Delay(3000);
+
+  hd44780_display_off();
+
+  HAL_Delay(3000);
+
+  hd44780_display_on();
+
+  HAL_Delay(3000);
+
+  hd44780_backlight_off();
+
+  HAL_Delay(3000);
+
+  hd44780_backlight_on();
 
   /* USER CODE END 2 */
 
