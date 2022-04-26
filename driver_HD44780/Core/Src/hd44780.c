@@ -339,3 +339,19 @@ void hd44780_cursor_blink_on(void) {
         driver.data = driver.display_control.ln;
         _write_command();
 }
+
+/************************************************************************************************************
+ * @brief Función que apaga el parpadeo del cursor.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_cursor_blink_off(void) {
+        
+        driver.display_control.ln &= ~CURSOR_BLINKING_ON_LN;
+        
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
+        _write_command();
+}
