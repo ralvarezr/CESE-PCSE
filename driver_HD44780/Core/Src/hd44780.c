@@ -11,8 +11,8 @@
 /* Los pines RS, RW, EN y BL están ubicados en el Low Nibble del Byte de data 
  * El High Nibble está compuesto por los pines D7-D4 respectivamente
  ******************************************************************************/
-#define RS_CMD          0x01    /* 0000 0001 . 0 = Commands. 1 = Characters.*/
-#define RS_CHR          0x00    /* 0000 0000 . 0 = Commands. 1 = Characters.*/
+#define RS_CMD          0x00    /* 0000 0000 . 0 = Commands. 1 = Characters.*/
+#define RS_CHR          0x01    /* 0000 0001 . 0 = Commands. 1 = Characters.*/
 #define RW              0x02    /* 0000 0010 . 0 = Write. 1 = Read. ESTE PIN SIEMPRE SE DEJA EN 0 PORQUE NO SE LEE DESDE EL DISPLAY. */
 #define ENABLE          0x04    /* 0000 0100 */
 #define BL_ON           0x08    /* 0000 1000 . 0 = Off. 1 = On */
@@ -225,6 +225,8 @@ void hd44780_init_driver(hd44780_t config) {
         driver.entry_mode.ln = ENTRY_MODE_SET_OFF_LN;
 
         /* Secuencia de inicialización del LCD para 4bits como se indica en el Datasheet */
+        driver.hd44780_control.delay_ms(15);
+
         driver.data = 0x30;     /* 0011 0000 */
         _write_command();
         driver.hd44780_control.delay_ms(5);
@@ -258,6 +260,15 @@ void hd44780_init_driver(hd44780_t config) {
 
         driver.data = driver.entry_mode.ln;
         _write_command();
+
+/*
+        uint8_t car = "a";
+        driver.select_register = RS_CHR;
+        driver.data = car & 0xF0;
+        _write_command();
+        driver.data = (car<<4) & 0xF0;
+        _write_command();*/
+
 
 }
 
