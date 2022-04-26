@@ -164,7 +164,7 @@ static void _press_enable(uint8_t data)
 
         driver.hd44780_control.i2c_write(driver.hd44780_control.address, data);
 
-        driver.hd44780_control.delay_us(40);
+        driver.hd44780_control.delay_us(400);
 }
 
 /************************************************************************************************************
