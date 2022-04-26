@@ -50,6 +50,11 @@ void hd44780_display_on(void);
 void hd44780_display_off(void);
 void hd44780_backlight_on(void);
 void hd44780_backlight_off(void);
+void hd44780_return_home(void);
+void hd44780_display_shift_right(void);
+void hd44780_display_shift_left(void);
+void hd44780_cursor_shift_right(void);
+void hd44780_cursor_shift_left(void);
 
 
 #endif /* INC_HD44780_H_ */

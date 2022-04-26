@@ -49,10 +49,11 @@
 
 /* Cursor/Display Shift */
 /* Todos estos comandos comparten el mismo High Nibble. */
-#define SHIFT_HN              0x10    /* 0001 0000 */
-#define SHIFT_OFF_LN          0X00    /* 0000 0000 */
-#define SHIFT_RIGHT_LN        0X40    /* 0100 0000. bit 6. 1 = Shift to the right. 0 = Shift to the left. */
-#define SHIFT_DISPLAY_LN      0x80    /* 1000 0000. bit 7. 1 = Display Shift. 0 = Cursor Move. */
+#define SHIFT_HN                        0x10    /* 0001 0000 */
+#define SHIFT_CURSOR_LEFT_LN            0X00    /* 0000 0000 */
+#define SHIFT_CURSOR_RIGHT_LN           0X40    /* 0100 0000 */
+#define SHIFT_DISPLAY_RIGHT_LN          0xC0    /* 1100 0000 */
+#define SHIFT_DISPLAY_LEFT_LN           0x80    /* 1000 0000 */
 
 /* Function Set */
 /* Todos estos comandos comparten el mismo High Nibble. */
@@ -225,6 +226,8 @@ void hd44780_init_driver(hd44780_t config) {
 
         driver.entry_mode.hn = ENTRY_MODE_SET_HN;
         driver.entry_mode.ln = ENTRY_MODE_SET_OFF_LN | ENTRY_MODE_CURSOR_LN;
+
+        driver.cursor_display_shift.hn = SHIFT_HN;
 
         /* Secuencia de inicialización del LCD para 4bits como se indica en el Datasheet */
         driver.hd44780_control.delay_ms(50);
@@ -448,4 +451,82 @@ void hd44780_backlight_off(void) {
         driver.data = NO_DATA;
 
         _write_command();  
+}
+
+/************************************************************************************************************
+ * @brief Función que devuelve el cursor y el display a la posicion inicial.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_return_home(void) {
+        
+        driver.data = RETURN_HOME_HN;
+        _write_command();
+
+        driver.data = RETURN_HOME_LN;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que mueve el display hacia la derecha.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_display_shift_right(void) {
+        
+        driver.cursor_display_shift.ln = SHIFT_DISPLAY_RIGHT_LN;
+        
+        driver.data = driver.cursor_display_shift.hn;
+        _write_command();
+
+        driver.data = driver.cursor_display_shift.ln;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que mueve el display hacia la izquierda.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_display_shift_left(void) {
+        
+        driver.cursor_display_shift.ln = SHIFT_DISPLAY_LEFT_LN;
+        
+        driver.data = driver.cursor_display_shift.hn;
+        _write_command();
+
+        driver.data = driver.cursor_display_shift.ln;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que mueve el cursor una posición hacia la derecha.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_cursor_shift_right(void) {
+        
+        driver.cursor_display_shift.ln = SHIFT_CURSOR_RIGHT_LN;
+        
+        driver.data = driver.cursor_display_shift.hn;
+        _write_command();
+
+        driver.data = driver.cursor_display_shift.ln;
+        _write_command();
+}
+
+/************************************************************************************************************
+ * @brief Función que mueve el cursor una posición hacia la izquierda.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_cursor_shift_left(void) {
+        
+        driver.cursor_display_shift.ln = SHIFT_CURSOR_LEFT_LN;
+        
+        driver.data = driver.cursor_display_shift.hn;
+        _write_command();
+
+        driver.data = driver.cursor_display_shift.ln;
+        _write_command();
 }
