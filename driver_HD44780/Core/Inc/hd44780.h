@@ -42,5 +42,6 @@ void hd44780_init_driver(hd44780_t config);
 void hd44780_print_char(const char car);
 void hd44780_print_string(const char *string);
 void hd44780_clear_screen(void);
+void hd44780_cursor_blink_on(void);
 
 #endif /* INC_HD44780_H_ */

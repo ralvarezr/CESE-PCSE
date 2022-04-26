@@ -43,14 +43,14 @@
 #define DISPLAY_OFF_LN          0X80    /* 1000 0000 */
 #define DISPLAY_ON_LN           0X40    /* 0100 0000 */
 #define CURSOR_ON_LN            0x20    /* 0010 0000 */         
-#define BLINKING_ON_LN          0x10    /* 0001 0000 */
+#define CURSOR_BLINKING_ON_LN   0x10    /* 0001 0000 */
 
 /* Cursor/Display Shift */
 /* Todos estos comandos comparten el mismo High Nibble. */
 #define SHIFT_HN              0x10    /* 0001 0000 */
 #define SHIFT_OFF_LN          0X00    /* 0000 0000 */
-#define SHIFT_RIGHT_LN        0X40    /* 0100 0000 */
-#define SHIFT_DISPLAY_LN      0x80    /* 1000 0000 */         
+#define SHIFT_RIGHT_LN        0X40    /* 0100 0000. bit 6. 1 = Shift to the right. 0 = Shift to the left. */
+#define SHIFT_DISPLAY_LN      0x80    /* 1000 0000. bit 7. 1 = Display Shift. 0 = Cursor Move. */
 
 /* Function Set */
 /* Todos estos comandos comparten el mismo High Nibble. */
@@ -320,5 +320,22 @@ void hd44780_clear_screen(void) {
         _write_command();
 
         driver.data = CLEAR_DISPLAY_LN;
+        _write_command();
+}
+
+
+/************************************************************************************************************
+ * @brief Función que enciende el parpadeo del cursor.
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_cursor_blink_on(void) {
+        
+        driver.display_control.ln |= CURSOR_BLINKING_ON_LN;
+        
+        driver.data = driver.display_control.hn;
+        _write_command();
+
+        driver.data = driver.display_control.ln;
         _write_command();
 }

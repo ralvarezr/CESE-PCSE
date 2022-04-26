@@ -122,6 +122,8 @@ int main(void)
 
   hd44780_print_string("!!!!!!!!");
 
+  hd44780_cursor_blink_on();
+
 
   /* USER CODE END 2 */
 
