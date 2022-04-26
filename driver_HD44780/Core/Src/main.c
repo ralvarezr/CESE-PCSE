@@ -18,8 +18,9 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "hd44780.h"
 #include "hd44780_nucleo_port.h"
+#include "hd44780.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -90,7 +91,16 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  hd44780_t lcd;
 
+  lcd.i2c_init = i2c_init_nucleo_port;
+  lcd.delay_ms = delay_ms_nucleo_port;
+  lcd.delay_us = delay_us_nucleo_port;
+  lcd.i2c_write = i2c_transmit_nucleo_port;
+  lcd.n_rows = 2;
+  lcd.address = (0x27 << 1);
+
+  hd44780_init_driver(lcd);
 
   /* USER CODE END 2 */
 
