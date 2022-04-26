@@ -39,6 +39,6 @@ typedef struct _hd44780 hd44780_t;
 
 
 void hd44780_init_driver(hd44780_t config);
-
+void hd44780_write_char(const char car);
 
 #endif /* INC_HD44780_H_ */
