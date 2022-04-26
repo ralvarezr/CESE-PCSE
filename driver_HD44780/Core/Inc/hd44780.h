@@ -38,7 +38,7 @@ struct _hd44780 {
 typedef struct _hd44780 hd44780_t;
 
 
-bool hd44780_init_driver(hd44780_t config);
+void hd44780_init_driver(hd44780_t config);
 
 
 #endif /* INC_HD44780_H_ */
