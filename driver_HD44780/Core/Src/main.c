@@ -114,6 +114,13 @@ int main(void)
 
   hd44780_print_string("??????????????????");
 
+  HAL_Delay(1000);
+
+  hd44780_clear_screen();
+
+  HAL_Delay(1000);
+
+  hd44780_print_string("!!!!!!!!");
 
 
   /* USER CODE END 2 */

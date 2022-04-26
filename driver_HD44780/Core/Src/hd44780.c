@@ -189,6 +189,8 @@ static void _write_command(void) {
  * @brief Función que inicializa el driver del LCD HD44780.
  * 
  * @param config Estructura del driver a inicializar.
+ * 
+ * @return None.
 ************************************************************************************************************/
 void hd44780_init_driver(hd44780_t config) {
 
@@ -212,7 +214,7 @@ void hd44780_init_driver(hd44780_t config) {
         if (driver.hd44780_control.n_rows == 1) {
                 driver.function_set.ln = FUNCTION_SET_1LINE_LN | FUNCTON_SET_5X10_CHAR_LN;
         } else {
-                driver.hd44780_control.rows = 2;
+                driver.hd44780_control.n_rows = 2;
                 driver.function_set.ln = FUNCTION_SET_2LINE_LN | FUNCTON_SET_5X8_CHAR_LN;
         }
 
@@ -275,6 +277,8 @@ void hd44780_init_driver(hd44780_t config) {
  * @brief Función que escribe un caracater en el LCD.
  * 
  * @param character caracter a imprimir.
+ * 
+ * @return None.
 ************************************************************************************************************/
 void hd44780_print_char(const char character) {
 
@@ -294,10 +298,27 @@ void hd44780_print_char(const char character) {
  * @brief Función que una cadena de caracteres en el LCD.
  * 
  * @param string cadena a imprimir.
+ * 
+ * @return None.
 ************************************************************************************************************/
 void hd44780_print_string(const char *string) {
         
         while(*string) {
                 hd44780_print_char(*string++);
         }
+}
+
+
+/************************************************************************************************************
+ * @brief Función que limpia el LCD
+ * 
+ * @return None.
+************************************************************************************************************/
+void hd44780_clear_screen(void) {
+        
+        driver.data = CLEAR_DISPLAY_HN;
+        _write_command();
+
+        driver.data = CLEAR_DISPLAY_LN;
+        _write_command();
 }
